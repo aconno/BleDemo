@@ -1,0 +1,74 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".epd.EpdCameraActivity"
+    android:background="@color/black1">
+
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_default">
+
+        <!-- The primary full-screen view. This can be replaced with whatever view
+             is needed to present your content, e.g. VideoView, SurfaceView,
+             TextureView, etc. -->
+        <com.journeyapps.barcodescanner.BarcodeView
+            android:id="@+id/qr_preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black1"/>
+
+        <TextView
+            android:id="@+id/cam_permission_txt"
+            android:visibility="gone"
+            style="@style/CameraInfoText"
+            android:layout_marginBottom="0dp"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:text="@string/camera_permission_info"/>
+
+        <Button
+            android:visibility="gone"
+            android:id="@+id/cam_permission_btn"
+            style="@style/CustomButton"
+            android:text="@string/got_it"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_60"/>
+
+        <!-- This FrameLayout insets its children based on system windows using
+             android:fitsSystemWindows. -->
+        <FrameLayout
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            android:layout_margin="@dimen/margin_default">
+
+            <LinearLayout
+                android:id="@+id/fullscreen_content_controls"
+                style="?metaButtonBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:background="@color/black_overlay"
+                android:orientation="horizontal"
+                tools:ignore="UselessParent"
+                >
+
+                <Button
+                    android:id="@+id/dummy_button"
+                    style="?metaButtonBarButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/dummy_button"/>
+
+            </LinearLayout>
+        </FrameLayout>
+    </FrameLayout>
+</FrameLayout>

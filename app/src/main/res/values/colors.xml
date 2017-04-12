@@ -3,4 +3,14 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="result_action">#ff424242</color>
+
+    <color name="black_overlay">#66000000</color>
+    <color name="black1">#000000</color>
+    <color name="a3_red">#e60000</color>
+
+    <color name="permission_granted">#2DF2A4</color>
+    <color name="permission_denied">#F22D24</color>
+    <color name="permission_unknown">#F2AD24</color>
 </resources>

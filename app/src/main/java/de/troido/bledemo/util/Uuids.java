@@ -1,9 +1,11 @@
 package de.troido.bledemo.util;
 
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 public final class Uuids {
     private static final String HEX_CHARS = "0123456789abcdef";
+    private static final Pattern UUID_PAT = Pattern.compile("-");
 
     private Uuids() {}
 
@@ -18,6 +20,6 @@ public final class Uuids {
     }
 
     public static byte[] toBytes(UUID uuid) {
-        return hexStringToByteArray(uuid.toString().replaceAll("-", ""));
+        return hexStringToByteArray(UUID_PAT.matcher(uuid.toString()).replaceAll(""));
     }
 }

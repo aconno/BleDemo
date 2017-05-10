@@ -6,9 +6,10 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import de.troido.bledemo.epd.EpdCameraActivity
+import de.troido.bledemo.sensor.SensorActivity
 import de.troido.bledemo.util.checkPermission
 import de.troido.bledemo.util.longToast
-import de.troido.bledemo.util.start
+import de.troido.bledemo.util.startActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 private val PERMISSIONS = arrayOf(
@@ -17,7 +18,9 @@ private val PERMISSIONS = arrayOf(
         Manifest.permission.BLUETOOTH_ADMIN,
         Manifest.permission.CAMERA,
         Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.WAKE_LOCK,
+        Manifest.permission.RECEIVE_BOOT_COMPLETED
 )
 
 class MainActivity : AppCompatActivity() {
@@ -47,6 +50,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startBle() {
-        btn_epd.setOnClickListener { start<EpdCameraActivity>() }
+        btn_epd.setOnClickListener { startActivity<EpdCameraActivity>() }
+        btn_sensor.setOnClickListener { startActivity<SensorActivity>() }
     }
 }

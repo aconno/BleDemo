@@ -1,14 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_sensor"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="de.troido.bledemo.sensor.SensorActivity">
+    android:layout_centerHorizontal="true"
+    android:orientation="vertical"
+    tools:context=".sensor.SensorActivity">
 
-</RelativeLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:columnOrderPreserved="true"
+            android:rowOrderPreserved="true"
+            android:useDefaultMargins="true">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/sensor_controller"
+                android:layout_gravity="fill"
+                android:layout_columnSpan="2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_controller"
+                    android:src="@drawable/board"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </android.support.v7.widget.CardView>
+
+            <de.troido.bledemo.sensor.view.SensorCardView
+                android:id="@+id/sensor_temperature"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <de.troido.bledemo.sensor.view.SensorCardView
+                android:id="@+id/sensor_light"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <de.troido.bledemo.sensor.view.SensorCardView
+                android:id="@+id/sensor_compass"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <de.troido.bledemo.sensor.view.SensorCardView
+                android:id="@+id/sensor_gyroscope"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <de.troido.bledemo.sensor.view.SensorCardView
+                android:id="@+id/sensor_accelerometer"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </GridLayout>
+    </ScrollView>
+</LinearLayout>

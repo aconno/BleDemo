@@ -66,7 +66,7 @@ public final class EpdResultActivity extends AppCompatActivity {
     /**
      * Magic delay needed to properly send the picture to mbed EPD.
      */
-    private static final long MAGIC_DELAY = 5;
+    private static final long MAGIC_DELAY = 10;
 
     @Bind(R.id.result_img)
     ImageView resultImg;

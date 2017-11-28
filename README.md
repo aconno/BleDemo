@@ -23,4 +23,5 @@ BeaconScanner. This scanner is able to deserialize the values into the proper da
 the Sensor class.
 
 In SensorBleService, you can also find the code which saves the deserialized values into the
-sharedPreferences.
+sharedPreferences. After persisting the values into sharedPreferences, a broadcast is sent from the
+persist functions. This broadcast will trigger the UI update with the sensor values from the Intent.

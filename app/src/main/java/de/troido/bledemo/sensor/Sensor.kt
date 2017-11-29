@@ -2,11 +2,7 @@ package de.troido.bledemo.sensor
 
 import android.support.annotation.DrawableRes
 import android.util.Log
-import de.troido.bleacon.data.BleDeserializer
-import de.troido.bleacon.data.Primitive
-import de.troido.bleacon.data.VecDeserializer
-import de.troido.bleacon.data.mapping
-import de.troido.bleacon.data.then
+import de.troido.bleacon.data.*
 import de.troido.bledemo.R
 import java.io.Serializable
 import java.util.*
@@ -82,6 +78,17 @@ sealed class Sensor<out V>(val value: V?, @DrawableRes val img: Int, val name: S
 
     class Light(v: Float?) : Sensor<Float>(v, R.drawable.ic_light, "Light")
 
+    class Potentiometer(v: Float?) : Sensor<Float>(v, -1, "Potentiometer") {
+        object Deserializer : BleDeserializer<Potentiometer> {
+            override val length: Int = 1
+
+            override fun deserialize(data: ByteArray): Potentiometer? {
+                Log.d("POTENTIOMETER", "${data.last().toFloat()}")
+                return Potentiometer(data.last().toFloat())
+            }
+        }
+    }
+
     sealed class Controller(val ix: Int, @DrawableRes img: Int) :
             Sensor<Unit>(Unit, img, "Controller") {
 
@@ -123,13 +130,29 @@ private val deserializer1 =
             }
         }
 
-private val deserializer2 =
-        VecDeserializer(2, Primitive.Float32.Deserializer)
-                .mapping {
-                    val (t, l) = it.map(Primitive.Float32::data)
-                    listOf(Sensor.Temperature(t), Sensor.Light(l * 100))
-                }
-                .then(Sensor.Controller.Deserializer) { vec, ctrl -> vec + ctrl }
+private val deserializer2 = getDeserializer2()
+//        VecDeserializer(2, Primitive.Float32.Deserializer)
+//                .mapping { list ->
+//                    val (t, l) = list.map(Primitive.Float32::data)
+//                    listOf(Sensor.Temperature(t), Sensor.Light(l * 100))
+//                }
+//                .then(Sensor.Controller.Deserializer) { vec, controller -> vec + controller }
+
+private fun getDeserializer2(): BleDeserializer<List<Sensor<Any>>> {
+    val listSize = 2
+    val vecDeserializer: VecDeserializer<Primitive.Float32> =
+            VecDeserializer(listSize, Primitive.Float32.Deserializer)
+
+    val sensorDeserializer: BleDeserializer<List<Sensor<Float>>> = vecDeserializer.mapping { list ->
+        val (t, l) = list.map(Primitive.Float32::data)
+        listOf(Sensor.Temperature(t), Sensor.Light(l * 100))
+    }
+
+    val combinedDeserializer: BleDeserializer<List<Sensor<Any>>> =
+            sensorDeserializer.then(Sensor.Controller.Deserializer, { vec, controller -> vec + controller })
+
+    return combinedDeserializer.then(Sensor.Potentiometer.Deserializer, { vec, potentiometer -> vec + potentiometer })
+}
 
 private val deserializers = mapOf(
         0x00.toByte() to deserializer1,

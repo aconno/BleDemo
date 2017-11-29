@@ -2,6 +2,7 @@ package de.troido.bledemo.sensor
 
 import android.bluetooth.le.ScanSettings
 import android.content.Intent
+import android.util.Log
 import de.troido.bleacon.ble.BleActor
 import de.troido.bleacon.config.BleFilter
 import de.troido.bleacon.config.BleScanSettings
@@ -24,6 +25,7 @@ class SensorBleService : BleService<List<Sensor<*>>>(restartOnRemove = false) {
         val GYROSCOPE: String = Gyroscope::class.java.simpleName
         val LIGHT: String = Light::class.java.simpleName
         val CONTROLLER: String = Controller::class.java.simpleName
+        val POTENTIOMETER: String = Potentiometer::class.java.simpleName
 
         const val X_SUFFIX = "_x"
         const val Y_SUFFIX = "_y"
@@ -40,6 +42,7 @@ class SensorBleService : BleService<List<Sensor<*>>>(restartOnRemove = false) {
     private fun persistFloat(v: Float?, obj: Sensor<*>) = v?.let {
         val k = obj::class.java.simpleName
 
+        Log.e("Persist", k)
         sharedPreferences.edit().putString(k, it.toString()).apply()
 
         localBroadcastManager.sendBroadcast(Intent(ACTION).apply { putExtra(k, obj) })

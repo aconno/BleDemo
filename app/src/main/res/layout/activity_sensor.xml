@@ -52,25 +52,67 @@
                 android:layout_height="wrap_content"/>
 
             <de.troido.bledemo.sensor.view.SensorCardView
-                android:id="@+id/sensor_compass"
+                android:id="@+id/sensor_magnetometer_x"
                 android:layout_columnWeight="1"
                 android:layout_gravity="fill"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <de.troido.bledemo.sensor.view.SensorCardView
-                android:id="@+id/sensor_gyroscope"
+                android:id="@+id/sensor_magnetometer_y"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <de.troido.bledemo.sensor.view.SensorCardView
+                android:id="@+id/sensor_magnetometer_z"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <de.troido.bledemo.sensor.view.SensorCardView
+                android:id="@+id/sensor_gyroscope_x"
                 android:layout_columnWeight="1"
                 android:layout_gravity="fill"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <de.troido.bledemo.sensor.view.SensorCardView
-                android:id="@+id/sensor_accelerometer"
+                android:id="@+id/sensor_gyroscope_y"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <de.troido.bledemo.sensor.view.SensorCardView
+                android:id="@+id/sensor_gyroscope_z"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <de.troido.bledemo.sensor.view.SensorCardView
+                android:id="@+id/sensor_accelerometer_x"
                 android:layout_columnWeight="1"
                 android:layout_gravity="fill"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+
+            <de.troido.bledemo.sensor.view.SensorCardView
+                android:id="@+id/sensor_accelerometer_y"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <de.troido.bledemo.sensor.view.SensorCardView
+                android:id="@+id/sensor_accelerometer_z"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </GridLayout>
     </ScrollView>
 </LinearLayout>

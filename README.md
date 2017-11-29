@@ -27,3 +27,10 @@ sharedPreferences. After persisting the values into sharedPreferences, a broadca
 persist functions. This broadcast will trigger the UI update with the sensor values from the Intent.
 
 The update of the views is done in the update method of the SensorCardView card.
+
+# REST functionality.
+
+It is possible to sync the readings from the sensor to a REST api. In order to activate this
+feature, you need to insert your domain for the baseUrl inside the getApi method from the
+MeasurementUploaderService class. Finally uncomment the syncFromIntent line from the onReceive
+method of the SensorActivity class.

@@ -25,3 +25,5 @@ the Sensor class.
 In SensorBleService, you can also find the code which saves the deserialized values into the
 sharedPreferences. After persisting the values into sharedPreferences, a broadcast is sent from the
 persist functions. This broadcast will trigger the UI update with the sensor values from the Intent.
+
+The update of the views is done in the update method of the SensorCardView card.

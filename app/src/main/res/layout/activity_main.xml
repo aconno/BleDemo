@@ -23,4 +23,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/btn_sensor"/>
+
+    <Button
+        android:id="@+id/btn_graph"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_graph" />
 </LinearLayout>

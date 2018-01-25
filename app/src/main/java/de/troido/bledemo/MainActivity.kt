@@ -52,5 +52,6 @@ class MainActivity : AppCompatActivity() {
     private fun startBle() {
         btn_epd.setOnClickListener { startActivity<EpdCameraActivity>() }
         btn_sensor.setOnClickListener { startActivity<SensorActivity>() }
+        btn_graph.setOnClickListener { startActivity<GraphActivity>() }
     }
 }

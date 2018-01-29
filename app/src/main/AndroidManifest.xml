@@ -42,11 +42,13 @@
             android:label="@string/title_activity_epd_result"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity android:name=".sensor.SensorActivity"></activity>
+        <activity android:name=".sensor.SensorActivity" />
 
         <service android:name=".sensor.SensorBleService" />
 
-        <activity android:name=".GraphActivity"></activity>
+        <activity
+            android:name=".GraphActivity"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

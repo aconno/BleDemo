@@ -9,4 +9,7 @@
     <string name="got_it">Got it</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="title_activity_epd_result">ResultActivity</string>
+
+    <string name="temperature_chart_title">Temperature</string>
+    <string name="temperature_chart_description">Temperature in degrees celsius.</string>
 </resources>

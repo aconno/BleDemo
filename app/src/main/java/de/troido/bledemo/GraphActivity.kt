@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.support.design.widget.TabLayout
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import com.github.mikephil.charting.charts.LineChart
@@ -70,10 +71,11 @@ class GraphActivity : AppCompatActivity() {
     }
 
     private class CompassGraph(
+        context: Context,
         title: String,
         description: Description,
         values: Flowable<Intent>
-    ) : TripleGraph(title, description, values) {
+    ) : TripleGraph(context, title, description, values) {
 
         override fun extractValue(intent: Intent) =
             (intent.getSerializableExtra(SensorBleService.COMPASS)
@@ -81,10 +83,11 @@ class GraphActivity : AppCompatActivity() {
     }
 
     private class GyroscopeGraph(
+        context: Context,
         title: String,
         description: Description,
         values: Flowable<Intent>
-    ) : TripleGraph(title, description, values) {
+    ) : TripleGraph(context, title, description, values) {
 
         override fun extractValue(intent: Intent) =
             (intent.getSerializableExtra(SensorBleService.GYROSCOPE)
@@ -92,10 +95,11 @@ class GraphActivity : AppCompatActivity() {
     }
 
     private class AccelerometerGraph(
+        context: Context,
         title: String,
         description: Description,
         values: Flowable<Intent>
-    ) : TripleGraph(title, description, values) {
+    ) : TripleGraph(context, title, description, values) {
         override fun extractValue(intent: Intent) =
             (intent.getSerializableExtra(SensorBleService.ACCELEROMETER)
                     as? Sensor.Accelerometer)?.value
@@ -128,6 +132,7 @@ class GraphActivity : AppCompatActivity() {
     }
 
     private abstract class TripleGraph(
+        context: Context,
         title: String,
         override val description: Description,
         values: Flowable<Intent>
@@ -140,7 +145,7 @@ class GraphActivity : AppCompatActivity() {
                 val value: Vec3<Float>? = extractValue(it)
 
                 if (value != null) {
-                    Triple(value.x, value.y, value.x)
+                    Triple(value.x, value.y, value.z)
 
                 } else {
                     Triple(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE)
@@ -159,6 +164,12 @@ class GraphActivity : AppCompatActivity() {
         private val xDataSet = LineDataSet(xEntries, "$title x")
         private val yDataSet = LineDataSet(yEntries, "$title y")
         private val zDataSet = LineDataSet(zEntries, "$title z")
+
+        init {
+            xDataSet.color = ContextCompat.getColor(context, R.color.graph_x)
+            yDataSet.color = ContextCompat.getColor(context, R.color.graph_y)
+            zDataSet.color = ContextCompat.getColor(context, R.color.graph_z)
+        }
 
         override val lineData = LineData(xDataSet, yDataSet, zDataSet)
 
@@ -235,6 +246,7 @@ class GraphActivity : AppCompatActivity() {
         val compassGraphDescription = Description()
         compassGraphDescription.text = getString(R.string.compass_chart_description)
         compassGraph = CompassGraph(
+                this,
                 getString(R.string.compass_chart_title),
                 compassGraphDescription,
                 values
@@ -243,6 +255,7 @@ class GraphActivity : AppCompatActivity() {
         val gyroscopeGraphDescription = Description()
         gyroscopeGraphDescription.text = getString(R.string.gyro_chart_description)
         gyroscopeGraph = GyroscopeGraph(
+                this,
                 getString(R.string.gyro_chart_title),
                 gyroscopeGraphDescription,
                 values
@@ -251,6 +264,7 @@ class GraphActivity : AppCompatActivity() {
         val accelerometerGraphDescription = Description()
         accelerometerGraphDescription.text = getString(R.string.accelerometer_chart_description)
         accelerometerGraph = AccelerometerGraph(
+                this,
                 getString(R.string.accelerometer_chart_title),
                 accelerometerGraphDescription,
                 values

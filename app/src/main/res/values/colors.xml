@@ -11,6 +11,10 @@
     <color name="black1">#000000</color>
     <color name="a3_red">#e60000</color>
 
+    <color name="graph_x">#ff0000</color>
+    <color name="graph_y">#00ff00</color>
+    <color name="graph_z">#0000ff</color>
+
     <color name="permission_granted">#2DF2A4</color>
     <color name="permission_denied">#F22D24</color>
     <color name="permission_unknown">#F2AD24</color>

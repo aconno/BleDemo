@@ -19,23 +19,25 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.BarcodeView;
 import com.journeyapps.barcodescanner.SourceData;
 import com.journeyapps.barcodescanner.camera.PreviewCallback;
-import de.troido.bledemo.R;
-import de.troido.bledemo.epd.bits.BitArray;
-import de.troido.bledemo.epd.conversion.BWConversion;
-import kotlin.Pair;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import de.troido.bledemo.R;
+import de.troido.bledemo.epd.bits.BitArray;
+import de.troido.bledemo.epd.conversion.BWConversion;
+import kotlin.Pair;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -46,16 +48,16 @@ public class EpdCameraActivity extends AppCompatActivity implements BarcodeCallb
     // Camera permission callback
     private static final int EMPTY_RESULT = 0;
 
-    @Bind(R.id.root)
+    @BindView(R.id.root)
     ViewGroup rootView;
 
-    @Bind(R.id.qr_preview)
+    @BindView(R.id.qr_preview)
     BarcodeView barcodeView;
 
-    @Bind(R.id.cam_permission_txt)
+    @BindView(R.id.cam_permission_txt)
     TextView camPermissionText;
 
-    @Bind(R.id.cam_permission_btn)
+    @BindView(R.id.cam_permission_btn)
     Button camPermissionBtn;
 
     private boolean shouldOpenPermissionSettings = false;

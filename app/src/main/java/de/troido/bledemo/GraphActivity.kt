@@ -273,7 +273,24 @@ class GraphActivity : AppCompatActivity() {
 
         startService<SensorBleService>()
 
+        subscribeAll()
         displayGraph(temperatureGraph, getString(R.string.temperature_chart_title))
+    }
+
+    private fun subscribeAll() {
+        subscribe(temperatureGraph)
+        subscribe(lightGraph)
+        subscribe(compassGraph)
+        subscribe(gyroscopeGraph)
+        subscribe(accelerometerGraph)
+    }
+
+    private fun <T> subscribe(graph: BleGraph<T>) {
+        graph.dataPoints.subscribeOn(Schedulers.io()).subscribe {
+            graph.addEntry((System.currentTimeMillis() - initialTime).toFloat(), it)
+            chart.notifyDataSetChanged()
+            chart.invalidate()
+        }
     }
 
     private fun <T> displayGraph(graph: BleGraph<T>, title: String) {
@@ -282,12 +299,6 @@ class GraphActivity : AppCompatActivity() {
         chart.description = graph.description
         chart.data = graph.lineData
         chart.invalidate()
-
-        graph.dataPoints.subscribeOn(Schedulers.io()).subscribe {
-            graph.addEntry((System.currentTimeMillis() - initialTime).toFloat(), it)
-            chart.notifyDataSetChanged()
-            chart.invalidate()
-        }
     }
 
     override fun onResume() {

@@ -3,9 +3,25 @@
     <string name="permission_fail">Cannot proceed without the requested permissions.</string>
     <string name="btn_epd">EPD</string>
     <string name="btn_sensor">Sensor</string>
+    <string name="btn_graph">Graph</string>
     <string name="camera_permission_info">To scan a QR code you need to grant access to your devices
         camera.</string>
     <string name="got_it">Got it</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="title_activity_epd_result">ResultActivity</string>
+
+    <string name="temperature_chart_title">Temperature</string>
+    <string name="temperature_chart_description">Temperature measured in degrees celsius.</string>
+
+    <string name="light_chart_title">Light</string>
+    <string name="light_chart_description">Light measured in percentage.</string>
+
+    <string name="compass_chart_title">Compass</string>
+    <string name="compass_chart_description">Compass measured in Gauss.</string>
+
+    <string name="gyro_chart_title">Gyroscope</string>
+    <string name="gyro_chart_description">Gyroscope measured in dps.</string>
+
+    <string name="accelerometer_chart_title">Accelerometer</string>
+    <string name="accelerometer_chart_description">Accelerometer measured in g.</string>
 </resources>

@@ -26,12 +26,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import de.troido.bleacon.util.Uuid16;
-import de.troido.bledemo.R;
-import de.troido.bledemo.epd.bits.BitArray;
-import de.troido.bledemo.util.Threads;
 
 import java.io.File;
 import java.util.Arrays;
@@ -40,6 +34,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import de.troido.bleacon.util.Uuid16;
+import de.troido.bledemo.R;
+import de.troido.bledemo.epd.bits.BitArray;
+import de.troido.bledemo.util.Threads;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -68,13 +69,13 @@ public final class EpdResultActivity extends AppCompatActivity {
      */
     private static final long MAGIC_DELAY = 10;
 
-    @Bind(R.id.result_img)
+    @BindView(R.id.result_img)
     ImageView resultImg;
 
-    @Bind(R.id.iv_btn_action)
+    @BindView(R.id.iv_btn_action)
     ImageButton actionButton;
 
-    @Bind(R.id.progress_bar)
+    @BindView(R.id.progress_bar)
     ProgressBar progressBar;
 
     private BluetoothLeScanner scanner;

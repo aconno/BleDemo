@@ -24,4 +24,7 @@
 
     <string name="accelerometer_chart_title">Accelerometer</string>
     <string name="accelerometer_chart_description">Accelerometer measured in g.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

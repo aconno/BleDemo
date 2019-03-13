@@ -8,14 +8,14 @@ import android.bluetooth.le.ScanFilter
 import android.bluetooth.le.ScanSettings
 import android.content.Context
 import android.util.Log
-import de.troido.bleacon.util.Uuid16
+import de.troido.bledemo.util.UUIDProvider
 import java.util.*
 
-class BluetoothImpl(private val context: Context, private val bluetoothImplListener: BluetoothImplListener): ScanResultFilteredDevice, BleConnStatusChangeListener, BleCharacteristicListener {
+class BluetoothImpl(private val context: Context, private val bluetoothImplListener: BluetoothImplListener) : ScanResultFilteredDevice, BleConnStatusChangeListener, BleCharacteristicListener {
 
 
     private val bleScanCallback = ScanCallback(this)
-    private val bleGattCallback = GattCallback(null,this,this)
+    private val bleGattCallback = GattCallback(null, this, this)
     private var gatt: BluetoothGatt? = null
     private var txCharacteristic: BluetoothGattCharacteristic? = null
 
@@ -26,44 +26,44 @@ class BluetoothImpl(private val context: Context, private val bluetoothImplListe
     override fun onDeviceFound(device: BluetoothDevice) {
         Log.d("BluetoothImplementation", "Device found")
         stopScan()
-        gatt = device.connectGatt(context,false,bleGattCallback)
+        gatt = device.connectGatt(context, false, bleGattCallback)
     }
 
-    fun writeLongMessage(message: ByteArray){
+    fun writeLongMessage(message: ByteArray) {
         gatt?.let { tempGatt ->
             txCharacteristic?.let { txCharacteristic ->
                 val totalPacketsCount = Math.ceil(message.size.toDouble() / MAX_PACKET_SIZE).toInt()
                 var packetsSentCount = 0
-                val packetsToSend = getPacketsArray(totalPacketsCount,message)
+                val packetsToSend = getPacketsArray(totalPacketsCount, message)
                 val startTime = System.currentTimeMillis()
 
                 Log.d("Writing", "STARTED WRITING")
-                bleGattCallback.packetWriterListener = object : PacketWriterListener{
+                bleGattCallback.packetWriterListener = object : PacketWriterListener {
                     override fun onPacketWriteFinished() {
                         packetsSentCount++
-                        if(totalPacketsCount <= packetsSentCount){
+                        if (totalPacketsCount <= packetsSentCount) {
                             val endTime = System.currentTimeMillis()
-                            Log.d("Total Time", "${(endTime - startTime).toDouble()/1000}s")
+                            Log.d("Total Time", "${(endTime - startTime).toDouble() / 1000}s")
                             return
                         }
-                        writePacket(tempGatt,txCharacteristic,packetsToSend[packetsSentCount])
+                        writePacket(tempGatt, txCharacteristic, packetsToSend[packetsSentCount])
                     }
                 }
 
-                if(totalPacketsCount < packetsSentCount)return
-                writePacket(tempGatt,txCharacteristic,packetsToSend[0])
+                if (totalPacketsCount < packetsSentCount) return
+                writePacket(tempGatt, txCharacteristic, packetsToSend[0])
             } ?: kotlin.run { bluetoothImplListener.onMessageWriteFailed() }
         } ?: kotlin.run { bluetoothImplListener.onMessageWriteFailed() }
     }
 
-    private fun writePacket(gatt: BluetoothGatt, characteristic: BluetoothGattCharacteristic, message: ByteArray){
+    private fun writePacket(gatt: BluetoothGatt, characteristic: BluetoothGattCharacteristic, message: ByteArray) {
         txCharacteristic?.value = message
         gatt.writeCharacteristic(characteristic)
     }
 
     private fun getPacketsArray(totalPackets: Int, message: ByteArray): List<ByteArray> {
         val tempPackets = arrayOfNulls<ByteArray>(totalPackets)
-        for (i in 0 until totalPackets){
+        for (i in 0 until totalPackets) {
             tempPackets[i] = Arrays.copyOfRange(
                     message,
                     i * MAX_PACKET_SIZE,
@@ -73,27 +73,27 @@ class BluetoothImpl(private val context: Context, private val bluetoothImplListe
         return tempPackets.map { it!! }
     }
 
-    fun startScan(){
-        if(!bluetoothAdapter.isEnabled){
+    fun startScan() {
+        if (!bluetoothAdapter.isEnabled) {
             bluetoothImplListener.onAdapterOff()
             return
         }
-        bluetoothAdapter.bluetoothLeScanner.startScan(defaultFilter(),defaultSettings(),bleScanCallback)
+        bluetoothAdapter.bluetoothLeScanner.startScan(defaultFilter(), defaultSettings(), bleScanCallback)
     }
 
-    fun stopScan(){
-        if(!bluetoothAdapter.isEnabled){
+    fun stopScan() {
+        if (!bluetoothAdapter.isEnabled) {
             bluetoothImplListener.onAdapterOff()
             return
         }
         bluetoothAdapter.bluetoothLeScanner.stopScan(bleScanCallback)
     }
 
-    fun turnOnBluetooth(){
+    fun turnOnBluetooth() {
         bluetoothAdapter.enable()
     }
 
-    fun closeGatt(){
+    fun closeGatt() {
         gatt?.disconnect()
         gatt?.close()
         gatt = null
@@ -118,7 +118,11 @@ class BluetoothImpl(private val context: Context, private val bluetoothImplListe
     }
 
     private fun defaultFilter() = mutableListOf<ScanFilter>(
-            ScanFilter.Builder().setDeviceName(DEVICE_NAME).build()
+            ScanFilter.Builder().setManufacturerData(
+                    0x0059,
+                    byteArrayOf(0x69, 0x07, 0x00, 0x00, 0x00, 0x1D, 0x43, 0x03, 0x00, 0x26, 0x3F, 0xFE.toByte(), 0x9D.toByte(), 0xA5.toByte()),
+                    byteArrayOf(0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
+            ).build()
     )
 
     private fun defaultSettings() = ScanSettings.Builder()
@@ -127,10 +131,10 @@ class BluetoothImpl(private val context: Context, private val bluetoothImplListe
 
     companion object {
         const val DEVICE_NAME = "EPD"
-        private const val MAX_PACKET_SIZE = 20
+        private const val MAX_PACKET_SIZE = 500
 
-        val UART_RX_CHR_UUID = Uuid16.fromString("A001").toUuid()
-        val UART_SVC_UUID = Uuid16.fromString("A000").toUuid()
+        val UART_RX_CHR_UUID = UUIDProvider.provideFullUUID("A001")
+        val UART_SVC_UUID = UUIDProvider.provideFullUUID("A000")
     }
 
 }

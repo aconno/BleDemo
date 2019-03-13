@@ -9,27 +9,33 @@ class GattCallback(
         var packetWriterListener: PacketWriterListener?,
         private val bleConnStatusChangeListener: BleConnStatusChangeListener,
         private val bleCharacteristicListener: BleCharacteristicListener
-): BluetoothGattCallback() {
+) : BluetoothGattCallback() {
 
     override fun onCharacteristicWrite(gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?, status: Int) {
         super.onCharacteristicWrite(gatt, characteristic, status)
-        if (status == BluetoothGatt.GATT_SUCCESS && characteristic?.uuid.toString() == BluetoothImpl.UART_RX_CHR_UUID.toString()){
+        if (status == BluetoothGatt.GATT_SUCCESS && characteristic?.uuid.toString() == BluetoothImpl.UART_RX_CHR_UUID.toString()) {
             packetWriterListener?.onPacketWriteFinished()
         }
     }
 
     override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
         Log.d("Bluetooth_status", "Old $status - New $newState")
-        if(newState==BluetoothGatt.STATE_CONNECTED){
+        if (newState == BluetoothGatt.STATE_CONNECTED) {
             gatt?.requestConnectionPriority(BluetoothGatt.CONNECTION_PRIORITY_HIGH)
+            gatt?.requestMtu(503)
             gatt?.discoverServices()
             return
         }
 
-        if(newState==BluetoothGatt.STATE_DISCONNECTED){
+        if (newState == BluetoothGatt.STATE_DISCONNECTED) {
             bleConnStatusChangeListener.onBleDisconnected()
             return
         }
+    }
+
+    override fun onMtuChanged(gatt: BluetoothGatt?, mtu: Int, status: Int) {
+        super.onMtuChanged(gatt, mtu, status)
+        gatt?.discoverServices()
     }
 
     override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
@@ -41,7 +47,6 @@ class GattCallback(
             }
         }
     }
-
 
 
 }

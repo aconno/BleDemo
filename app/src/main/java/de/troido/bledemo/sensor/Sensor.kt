@@ -15,10 +15,16 @@ sealed class Sensor<out V>(val value: V?, @DrawableRes val img: Int, val name: S
     }
 
     object Deserializer : BleDeserializer<List<Sensor<*>>> {
-        override val length = 19
+        override val length = 11
 
-        override fun deserialize(data: ByteArray): List<Sensor<*>>? =
-                deserializers[data[0]]?.deserialize(data.copyOfRange(1, data.size))
+        override fun deserialize(data: ByteArray): List<Sensor<*>>? {
+            Log.e("Test", data.contentToString())
+//            return null
+            return deserializers[data[3]]?.let {
+                Log.e("Test", "test")
+                it.deserialize(data.copyOfRange(4, data.size))
+            }
+        }
     }
 
     class Accelerometer(v: Vec3<Float>?) : Sensor<Vec3<Float>>(
@@ -94,7 +100,7 @@ sealed class Sensor<out V>(val value: V?, @DrawableRes val img: Int, val name: S
 
         companion object {
             private val controllers = arrayOf(JoystickUp, JoystickDown, JoystickLeft,
-                                              JoystickRight, LeftButton, RightButton)
+                    JoystickRight, LeftButton, RightButton)
 
             fun fromIx(ix: Int): Controller? = controllers.firstOrNull { it.ix == ix }
         }
@@ -111,9 +117,10 @@ sealed class Sensor<out V>(val value: V?, @DrawableRes val img: Int, val name: S
 
             override val length = 1
             override fun deserialize(data: ByteArray): Controller? {
-                Log.d("BT", data.map { it.toInt() and 0x00ff }.toString())
-                return controllers.firstOrNull { data[0].toInt() and (1 shl 7 shr it.ix) != 0 }
-                        ?: None
+                Log.d("BluetoothBits", Integer.toBinaryString(data[0].toInt() and 0xFF))
+                return controllers.firstOrNull { data[0].toInt() and (1 shl 7 shr it.ix) != 0 }?.also {
+                    Log.e("Active", it.javaClass.name)
+                } ?: None
             }
         }
     }
@@ -149,9 +156,9 @@ private fun getDeserializer2(): BleDeserializer<List<Sensor<Any>>> {
     }
 
     val combinedDeserializer: BleDeserializer<List<Sensor<Any>>> =
-            sensorDeserializer.then(Sensor.Controller.Deserializer, { vec, controller -> vec + controller })
+            sensorDeserializer.then(Sensor.Controller.Deserializer) { vec, controller -> vec + controller }
 
-    return combinedDeserializer.then(Sensor.Potentiometer.Deserializer, { vec, potentiometer -> vec + potentiometer })
+    return combinedDeserializer.then(Sensor.Potentiometer.Deserializer) { vec, potentiometer -> vec + potentiometer }
 }
 
 private val deserializers = mapOf(

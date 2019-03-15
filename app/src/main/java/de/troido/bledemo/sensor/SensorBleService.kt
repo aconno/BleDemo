@@ -63,17 +63,27 @@ class SensorBleService : BleService<List<Sensor<*>>>(restartOnRemove = false) {
 
     private val scanner = BeaconScanner(
             Deserializer,
-            BleFilter { uuid16 = BEACON_UUID },
-            BleScanSettings { scanMode = ScanSettings.SCAN_MODE_LOW_LATENCY }
-    ) { _, _, data ->
+            BleFilter {
+//                this.manufacturerData.set(
+//                        0x0059,
+//                        byteArrayOf(0x69, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00),
+//                        byteArrayOf(0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
+//                )
+                this.address = "DF:A3:4C:20:75:AB"
+            },
+            BleScanSettings {
+                scanMode = ScanSettings.SCAN_MODE_LOW_LATENCY
+            }
+    ) { _, a, data ->
+        Log.e("Test", a.address)
         data.forEach {
             if (it.value != null) {
                 when {
-                    it.value is Float   -> persistFloat(it.value, it)
-                    it is Compass       -> persistVec(it.value, it)
+                    it.value is Float -> persistFloat(it.value, it)
+                    it is Compass -> persistVec(it.value, it)
                     it is Accelerometer -> persistVec(it.value, it)
-                    it is Gyroscope     -> persistVec(it.value, it)
-                    it is Controller    -> persistIx(it.ix, it)
+                    it is Gyroscope -> persistVec(it.value, it)
+                    it is Controller -> persistIx(it.ix, it)
                 }
             }
         }

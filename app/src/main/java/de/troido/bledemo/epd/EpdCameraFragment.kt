@@ -2,12 +2,14 @@ package de.troido.bledemo.epd
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Rect
 import android.media.MediaActionSound
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
+import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -25,7 +27,7 @@ import de.troido.bledemo.epd.conversion.BWConversion
 import kotlinx.android.synthetic.main.fragment_epd_camera.*
 
 
-class EpdCameraFragment: android.support.v4.app.Fragment(), BarcodeCallback {
+class EpdCameraFragment : Fragment(), BarcodeCallback {
 
 
     var cameraResultListener: CameraResultListener? = null
@@ -33,17 +35,17 @@ class EpdCameraFragment: android.support.v4.app.Fragment(), BarcodeCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("TAG","ENTERED IN FRAGMENT")
+        Log.d("TAG", "ENTERED IN FRAGMENT")
     }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_epd_camera,container,false)!!
+        return inflater.inflate(R.layout.fragment_epd_camera, container, false)!!
     }
 
     override fun onStart() {
         super.onStart()
-        Handler().postDelayed({enableScanner()},1500)
+        Handler().postDelayed({ enableScanner() }, 1500)
     }
 
     override fun onResume() {
@@ -195,4 +197,23 @@ class EpdCameraFragment: android.support.v4.app.Fragment(), BarcodeCallback {
     override fun possibleResultPoints(resultPoints: MutableList<ResultPoint>?) {}
 
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            0 -> {
+                context?.let { ctx ->
+                    data?.data?.let { uri ->
+                        val start = System.currentTimeMillis()
+                        val image = BitmapFactory.decodeStream(ctx.contentResolver.openInputStream(uri))
+                        Log.e("TIME 2", "${(System.currentTimeMillis() - start)}ms")
+                        val bitmap = Bitmap.createScaledBitmap(image, 200, 200, false)
+                        Log.e("TIME 3", "${(System.currentTimeMillis() - start)}ms")
+                        val bw = BWConversion.convertToBW(bitmap)
+                        Log.e("TIME FINAL", "${(System.currentTimeMillis() - start)}ms")
+                        cameraResultListener?.onCameraResult(bw)
+                    }
+                }
+            }
+            else -> super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
 }

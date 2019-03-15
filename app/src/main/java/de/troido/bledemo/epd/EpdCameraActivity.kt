@@ -1,37 +1,39 @@
 package de.troido.bledemo.epd
 
 import android.bluetooth.BluetoothAdapter
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
 import android.widget.Toast
-import de.troido.bledemo.Application
 import de.troido.bledemo.R
 import de.troido.bledemo.epd.bits.BitArray
 import de.troido.bledemo.epd.bt.BluetoothImpl
 import de.troido.bledemo.epd.bt.BluetoothImplListener
 import de.troido.bledemo.epd.bt.BluetoothStateListener
 import de.troido.bledemo.epd.bt.BluetoothStateReceiver
+import de.troido.bledemo.epd.conversion.BWConversion
 import kotlinx.android.synthetic.main.activity_epd_camera.*
 
-class EpdCameraActivity: AppCompatActivity(), CameraResultListener, BluetoothImplListener, BluetoothStateListener {
+
+class EpdCameraActivity : AppCompatActivity(), CameraResultListener, BluetoothImplListener, BluetoothStateListener {
     private val bluetoothImpl = BluetoothImpl(this, this)
 
 
     val bluetoothStateReceiver = BluetoothStateReceiver(this)
 
     override fun onMessageWriteFailed() {
-        Snackbar.make(ept_activity_layout,"Not Connected",Snackbar.LENGTH_LONG).show()
+        Snackbar.make(ept_activity_layout, "Not Connected", Snackbar.LENGTH_LONG).show()
     }
 
     override fun onConnectionLost() {
-        Snackbar.make(ept_activity_layout,"Connection lost",Snackbar.LENGTH_INDEFINITE).setAction("Rescan") {
+        Snackbar.make(ept_activity_layout, "Connection lost", Snackbar.LENGTH_INDEFINITE).setAction("Rescan") {
             progressbar?.visibility = View.VISIBLE
             bluetoothImpl.startScan()
         }.show()
@@ -42,8 +44,8 @@ class EpdCameraActivity: AppCompatActivity(), CameraResultListener, BluetoothImp
             progressbar?.postOnAnimation {
                 progressbar?.visibility = View.GONE
                 Handler().postDelayed({
-                    Toast.makeText(this,"Connected", Toast.LENGTH_SHORT).show()
-                },500)
+                    Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show()
+                }, 500)
             }
         }
     }
@@ -51,7 +53,7 @@ class EpdCameraActivity: AppCompatActivity(), CameraResultListener, BluetoothImp
     override fun onAdapterOff() {
         this.runOnUiThread {
             progressbar?.visibility = View.GONE
-            Snackbar.make(ept_activity_layout, "Bluetooth Off", Snackbar.LENGTH_INDEFINITE).setAction("Turn On"){
+            Snackbar.make(ept_activity_layout, "Bluetooth Off", Snackbar.LENGTH_INDEFINITE).setAction("Turn On") {
                 bluetoothImpl.turnOnBluetooth()
             }.show()
         }
@@ -59,7 +61,7 @@ class EpdCameraActivity: AppCompatActivity(), CameraResultListener, BluetoothImp
 
     override fun onBluetoothTurnedOn() {
         this.runOnUiThread {
-            Snackbar.make(ept_activity_layout, "Bluetooth Turned On", Snackbar.LENGTH_INDEFINITE).setAction("Rescan"){
+            Snackbar.make(ept_activity_layout, "Bluetooth Turned On", Snackbar.LENGTH_INDEFINITE).setAction("Rescan") {
                 bluetoothImpl.startScan()
             }.show()
         }

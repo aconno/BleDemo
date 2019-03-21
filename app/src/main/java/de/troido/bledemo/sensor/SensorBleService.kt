@@ -1,12 +1,13 @@
 package de.troido.bledemo.sensor
 
+import android.bluetooth.le.ScanFilter
 import android.bluetooth.le.ScanSettings
 import android.content.Intent
 import android.util.Log
 import de.troido.bleacon.ble.BleActor
-import de.troido.bleacon.config.BleFilter
-import de.troido.bleacon.config.BleScanSettings
+import de.troido.bleacon.scanner.BeaconMetaData
 import de.troido.bleacon.scanner.BeaconScanner
+import de.troido.bleacon.scanner.BeaconScannerListener
 import de.troido.bleacon.service.BleService
 import de.troido.bleacon.util.Uuid16
 import de.troido.bledemo.sensor.Sensor.*
@@ -62,32 +63,33 @@ class SensorBleService : BleService<List<Sensor<*>>>(restartOnRemove = false) {
     }
 
     private val scanner = BeaconScanner(
-            Deserializer,
-            BleFilter {
-//                this.manufacturerData.set(
-//                        0x0059,
-//                        byteArrayOf(0x69, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00),
-//                        byteArrayOf(0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
-//                )
-                this.address = "DF:A3:4C:20:75:AB"
-            },
-            BleScanSettings {
-                scanMode = ScanSettings.SCAN_MODE_LOW_LATENCY
-            }
-    ) { _, a, data ->
-        Log.e("Test", a.address)
-        data.forEach {
-            if (it.value != null) {
-                when {
-                    it.value is Float -> persistFloat(it.value, it)
-                    it is Compass -> persistVec(it.value, it)
-                    it is Accelerometer -> persistVec(it.value, it)
-                    it is Gyroscope -> persistVec(it.value, it)
-                    it is Controller -> persistIx(it.ix, it)
+            deserializer = Deserializer,
+            filter = ScanFilter.Builder().setManufacturerData(
+                    0x0059,
+                    byteArrayOf(0x69, 0x07, 0x00, 0x00, 0x00, 0x1D, 0x43, 0x03, 0x00, 0x26, 0x3F, 0xFE.toByte(), 0x9D.toByte(), 0xA5.toByte()),
+                    byteArrayOf(0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
+            ).build(),
+            settings = ScanSettings.Builder()
+                    .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+                    .build(),
+            beaconListener = object : BeaconScannerListener<List<Sensor<*>>> {
+                override fun onBeaconFound(scanner: BeaconScanner<List<Sensor<*>>>, metaData: BeaconMetaData, data: List<Sensor<*>>) {
+                    Log.e("Test", metaData.device.address)
+                    data.forEach {
+                        if (it.value != null) {
+                            when {
+                                it.value is Float -> persistFloat(it.value, it)
+                                it is Compass -> persistVec(it.value, it)
+                                it is Accelerometer -> persistVec(it.value, it)
+                                it is Gyroscope -> persistVec(it.value, it)
+                                it is Controller -> persistIx(it.ix, it)
+                            }
+                        }
+                    }
                 }
+
             }
-        }
-    }
+    )
 
     override val actors: List<BleActor> = listOf(scanner)
 }

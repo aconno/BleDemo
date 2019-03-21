@@ -15,7 +15,7 @@ sealed class Sensor<out V>(val value: V?, @DrawableRes val img: Int, val name: S
     }
 
     object Deserializer : BleDeserializer<List<Sensor<*>>> {
-        override val length = 11
+        override val length = -1
 
         override fun deserialize(data: ByteArray): List<Sensor<*>>? {
             Log.e("Test", data.contentToString())
@@ -127,14 +127,12 @@ sealed class Sensor<out V>(val value: V?, @DrawableRes val img: Int, val name: S
 }
 
 private val deserializer1 =
-        VecDeserializer(9, Primitive.Int16.Deserializer).mapping {
-            it.map(Primitive.Int16::data).apply { Log.d("vals", "$this") }.let {
+        VecDeserializer(9, Int16Deserializer).mapping {
                 listOf(
                         Sensor.Gyroscope.fromShorts(it[0], it[1], it[2]),
                         Sensor.Accelerometer.fromShorts(it[3], it[4], it[5]),
                         Sensor.Compass.fromShorts(it[6], it[7], it[8])
                 )
-            }
         }
 
 private val deserializer2 = getDeserializer2()
@@ -147,12 +145,11 @@ private val deserializer2 = getDeserializer2()
 
 private fun getDeserializer2(): BleDeserializer<List<Sensor<Any>>> {
     val listSize = 2
-    val vecDeserializer: VecDeserializer<Primitive.Float32> =
-            VecDeserializer(listSize, Primitive.Float32.Deserializer)
+    val vecDeserializer: VecDeserializer<Float> =
+            VecDeserializer(listSize, Float32Deserializer)
 
     val sensorDeserializer: BleDeserializer<List<Sensor<Float>>> = vecDeserializer.mapping { list ->
-        val (t, l) = list.map(Primitive.Float32::data)
-        listOf(Sensor.Temperature(t), Sensor.Light(l * 100))
+       listOf(Sensor.Temperature(list[0]), Sensor.Light(list[1] * 100))
     }
 
     val combinedDeserializer: BleDeserializer<List<Sensor<Any>>> =

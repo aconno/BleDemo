@@ -43,7 +43,8 @@ class BluetoothImpl(private val context: Context, private val bluetoothImplListe
                         packetsSentCount++
                         if (totalPacketsCount <= packetsSentCount) {
                             val endTime = System.currentTimeMillis()
-                            Log.d("Total Time", "${(endTime - startTime).toDouble() / 1000}s")
+                            Log.e("Total Time", "${(endTime - startTime).toDouble() / 1000}s")
+                            bluetoothImplListener.onLongMessageFinishedWriting()
                             return
                         }
                         writePacket(tempGatt, txCharacteristic, packetsToSend[packetsSentCount])

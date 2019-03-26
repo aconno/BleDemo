@@ -1,5 +1,6 @@
 package de.troido.bledemo.epd
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -10,6 +11,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -27,15 +29,15 @@ import de.troido.bledemo.epd.conversion.BWConversion
 import kotlinx.android.synthetic.main.fragment_epd_camera.*
 
 
-class EpdCameraFragment : Fragment(), BarcodeCallback {
-
-
+class EpdCameraFragment : Fragment(), BarcodeCallback, CameraActivityListener {
     var cameraResultListener: CameraResultListener? = null
-    var cameraIconLocal: ImageView? = null
+    private var cameraIconLocal: ImageView? = null
+    private val mediaActionSound = MediaActionSound()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("TAG", "ENTERED IN FRAGMENT")
+        mediaActionSound.load(MediaActionSound.SHUTTER_CLICK)
     }
 
 
@@ -51,6 +53,7 @@ class EpdCameraFragment : Fragment(), BarcodeCallback {
     override fun onResume() {
         super.onResume()
         qr_preview?.resume()
+        setCameraEnabled()
     }
 
     override fun onPause() {
@@ -157,8 +160,9 @@ class EpdCameraFragment : Fragment(), BarcodeCallback {
     }
 
     private fun cameraClick() {
+        setCameraDisabled()
         activity?.runOnUiThread {
-            MediaActionSound().play(MediaActionSound.SHUTTER_CLICK)
+            mediaActionSound.play(MediaActionSound.SHUTTER_CLICK)
         }
 
         val start = System.currentTimeMillis()
@@ -173,7 +177,7 @@ class EpdCameraFragment : Fragment(), BarcodeCallback {
             else
                 sourceData.dataWidth
 
-            Log.e("TIME 1", "${(System.currentTimeMillis() - start)}ms")
+            Log.e("Started ", "${(System.currentTimeMillis() - start)}ms")
 
             sourceData.cropRect = Rect(
                     Math.max(0, (height - width) / 2),
@@ -182,11 +186,8 @@ class EpdCameraFragment : Fragment(), BarcodeCallback {
                     Math.min(width, (width + height) / 2)
             )
 
-            Log.e("TIME 2", "${(System.currentTimeMillis() - start)}ms")
             val bitmap = Bitmap.createScaledBitmap(sourceData.bitmap, 200, 200, false)
-            Log.e("TIME 3", "${(System.currentTimeMillis() - start)}ms")
             val bw = BWConversion.convertToBW(bitmap)
-            Log.e("TIME FINAL", "${(System.currentTimeMillis() - start)}ms")
 
             cameraResultListener?.onCameraResult(bw)
         }
@@ -196,19 +197,15 @@ class EpdCameraFragment : Fragment(), BarcodeCallback {
 
     override fun possibleResultPoints(resultPoints: MutableList<ResultPoint>?) {}
 
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             0 -> {
                 context?.let { ctx ->
                     data?.data?.let { uri ->
-                        val start = System.currentTimeMillis()
+                        System.currentTimeMillis()
                         val image = BitmapFactory.decodeStream(ctx.contentResolver.openInputStream(uri))
-                        Log.e("TIME 2", "${(System.currentTimeMillis() - start)}ms")
                         val bitmap = Bitmap.createScaledBitmap(image, 200, 200, false)
-                        Log.e("TIME 3", "${(System.currentTimeMillis() - start)}ms")
                         val bw = BWConversion.convertToBW(bitmap)
-                        Log.e("TIME FINAL", "${(System.currentTimeMillis() - start)}ms")
                         cameraResultListener?.onCameraResult(bw)
                     }
                 }
@@ -216,4 +213,37 @@ class EpdCameraFragment : Fragment(), BarcodeCallback {
             else -> super.onActivityResult(requestCode, resultCode, data)
         }
     }
+
+    private fun setCameraEnabled(){
+        activity?.let {
+            it.runOnUiThread {
+                cameraIconLocal?.isClickable = true
+                context?.let { context ->
+                    cameraIconLocal?.setColorFilter(ContextCompat.getColor(context,android.R.color.white))
+                }
+            }
+        }
+    }
+
+    @SuppressLint("PrivateResource")
+    private fun setCameraDisabled(){
+        activity?.let { fragmentActivity ->
+            fragmentActivity.runOnUiThread {
+                cameraIconLocal?.isClickable = false
+                context?.let {
+                    cameraIconLocal?.setColorFilter(ContextCompat.getColor(it,R.color.material_blue_grey_800))
+                }
+            }
+        }
+    }
+
+    override fun onBLEnMessageTransferFinished() {
+        setCameraEnabled()
+    }
+
+    override fun onBLEnMessageTransferFailed() {
+        setCameraEnabled()
+    }
+
+    override fun onBLEConnected() {}
 }

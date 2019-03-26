@@ -23,13 +23,14 @@ import kotlinx.android.synthetic.main.activity_epd_camera.*
 
 
 class EpdCameraActivity : AppCompatActivity(), CameraResultListener, BluetoothImplListener, BluetoothStateListener {
+
     private val bluetoothImpl = BluetoothImpl(this, this)
-
-
-    val bluetoothStateReceiver = BluetoothStateReceiver(this)
+    private val bluetoothStateReceiver = BluetoothStateReceiver(this)
+    private var cameraActivityListener: CameraActivityListener? = null
 
     override fun onMessageWriteFailed() {
         Snackbar.make(ept_activity_layout, "Not Connected", Snackbar.LENGTH_LONG).show()
+        cameraActivityListener?.onBLEnMessageTransferFailed()
     }
 
     override fun onConnectionLost() {
@@ -48,6 +49,7 @@ class EpdCameraActivity : AppCompatActivity(), CameraResultListener, BluetoothIm
                 }, 500)
             }
         }
+        cameraActivityListener?.onBLEConnected()
     }
 
     override fun onAdapterOff() {
@@ -76,6 +78,11 @@ class EpdCameraActivity : AppCompatActivity(), CameraResultListener, BluetoothIm
     }
 
 
+    override fun onLongMessageFinishedWriting() {
+        cameraActivityListener?.onBLEnMessageTransferFinished()
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_epd_camera)
@@ -88,6 +95,8 @@ class EpdCameraActivity : AppCompatActivity(), CameraResultListener, BluetoothIm
         supportFragmentManager.beginTransaction()
                 .replace(R.id.camera_frame_layout, cameraFragment)
                 .commit()
+
+        cameraActivityListener = cameraFragment
 
         bluetoothImpl.startScan()
     }

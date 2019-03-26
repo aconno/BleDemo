@@ -4,6 +4,8 @@ interface BluetoothImplListener {
 
     fun onMessageWriteFailed()
 
+    fun onLongMessageFinishedWriting()
+
     fun onConnectionLost()
 
     fun onConnected()

@@ -20,7 +20,7 @@
         android:text="@string/btn_epd"
         android:src="@drawable/tcamera"
         android:layout_margin="10dp"
-        android:background="@android:color/transparent"/>
+        />
 
     <ImageButton
         android:id="@+id/btn_sensor"
@@ -29,7 +29,7 @@
         android:text="@string/btn_sensor"
         android:src="@drawable/sensor"
         android:layout_margin="10dp"
-        android:background="@android:color/transparent"/>
+        />
 
     <ImageButton
         android:id="@+id/btn_graph"
@@ -38,5 +38,5 @@
         android:text="@string/btn_graph"
         android:src="@drawable/graph"
         android:layout_margin="10dp"
-        android:background="@android:color/transparent"/>
+        />
 </LinearLayout>

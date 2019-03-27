@@ -33,6 +33,7 @@ class EpdCameraFragment : Fragment(), BarcodeCallback, CameraActivityListener {
     var cameraResultListener: CameraResultListener? = null
     private var cameraIconLocal: ImageView? = null
     private val mediaActionSound = MediaActionSound()
+    private var connected = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -160,6 +161,7 @@ class EpdCameraFragment : Fragment(), BarcodeCallback, CameraActivityListener {
     }
 
     private fun cameraClick() {
+        if(!connected) return
         setCameraDisabled()
         activity?.runOnUiThread {
             mediaActionSound.play(MediaActionSound.SHUTTER_CLICK)
@@ -245,5 +247,7 @@ class EpdCameraFragment : Fragment(), BarcodeCallback, CameraActivityListener {
         setCameraEnabled()
     }
 
-    override fun onBLEConnected() {}
+    override fun onBLEConnected() {
+        connected = true
+    }
 }

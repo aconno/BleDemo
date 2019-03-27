@@ -13,7 +13,6 @@ import java.util.*
 
 class BluetoothImpl(private val context: Context, private val bluetoothImplListener: BluetoothImplListener) : ScanResultFilteredDevice, BleConnStatusChangeListener, BleCharacteristicListener {
 
-
     private val bleScanCallback = ScanCallback(this)
     private val bleGattCallback = GattCallback(null, this, this)
     private var gatt: BluetoothGatt? = null

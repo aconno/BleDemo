@@ -184,7 +184,6 @@ class EpdCameraFragment : Fragment(), BarcodeCallback, CameraActivityListener {
 
         qr_preview?.cameraInstance?.requestPreview { sourceData ->
             dirtyCallbackSolutionHandler.removeMessages(0) // clean post handler
-            Log.e("Started ", "We are here2")
             val width = if (sourceData.isRotated)
                 sourceData.dataWidth
             else
@@ -209,7 +208,6 @@ class EpdCameraFragment : Fragment(), BarcodeCallback, CameraActivityListener {
 
             cameraResultListener?.onCameraResult(bw)
         }
-        Log.e("Started ", "We are here3")
     }
 
     override fun barcodeResult(result: BarcodeResult?) {}

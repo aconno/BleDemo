@@ -20,6 +20,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
@@ -160,6 +161,8 @@ class EpdCameraFragment : Fragment(), BarcodeCallback, CameraActivityListener {
         root!!.addView(mask2)
     }
 
+    private val dirtyCallbackSolutionHandler = Handler()
+
     private fun cameraClick() {
         if(!connected) return
         setCameraDisabled()
@@ -168,7 +171,20 @@ class EpdCameraFragment : Fragment(), BarcodeCallback, CameraActivityListener {
         }
 
         val start = System.currentTimeMillis()
+        Log.e("Started ", "We are here")
+        // dirty temporary solution
+        dirtyCallbackSolutionHandler.postDelayed({
+            activity?.let {
+                it.runOnUiThread {
+                    Toast.makeText(it, "Failed to take frame, please retry", Toast.LENGTH_SHORT).show()
+                    setCameraEnabled()
+                }
+            }
+        },1000)
+
         qr_preview?.cameraInstance?.requestPreview { sourceData ->
+            dirtyCallbackSolutionHandler.removeMessages(0) // clean post handler
+            Log.e("Started ", "We are here2")
             val width = if (sourceData.isRotated)
                 sourceData.dataWidth
             else
@@ -193,6 +209,7 @@ class EpdCameraFragment : Fragment(), BarcodeCallback, CameraActivityListener {
 
             cameraResultListener?.onCameraResult(bw)
         }
+        Log.e("Started ", "We are here3")
     }
 
     override fun barcodeResult(result: BarcodeResult?) {}

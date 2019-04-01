@@ -88,7 +88,6 @@ class EpdCameraActivity : AppCompatActivity(), CameraResultListener, BluetoothIm
         setContentView(R.layout.activity_epd_camera)
         registerReceiver(bluetoothStateReceiver, IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED))
 
-
         val cameraFragment = EpdCameraFragment()
         cameraFragment.cameraResultListener = this
 

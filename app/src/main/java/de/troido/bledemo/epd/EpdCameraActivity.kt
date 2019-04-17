@@ -29,7 +29,7 @@ class EpdCameraActivity : AppCompatActivity(), CameraResultListener, BluetoothIm
     private var cameraActivityListener: CameraActivityListener? = null
 
     override fun onMessageWriteFailed() {
-        Snackbar.make(ept_activity_layout, "Not Connected", Snackbar.LENGTH_LONG).show()
+        Toast.makeText(this, "Not Connected", Snackbar.LENGTH_LONG).show()
         cameraActivityListener?.onBLEnMessageTransferFailed()
     }
 

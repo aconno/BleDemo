@@ -11,6 +11,7 @@
         android:required="true" />
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -47,7 +48,9 @@
         <activity
             android:name=".GraphActivity"
             android:theme="@style/AppTheme" />
-        
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="${fabricAPIKey}" />
     </application>
 
 </manifest>

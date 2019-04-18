@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ACD Demo</string>
+    <string name="app_name">ACD EPD Interface</string>
     <string name="permission_fail">Cannot proceed without the requested permissions.</string>
     <string name="btn_epd">EPD</string>
     <string name="btn_sensor">Sensor</string>

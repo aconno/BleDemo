@@ -20,6 +20,7 @@ import de.troido.bledemo.epd.bt.BluetoothStateListener
 import de.troido.bledemo.epd.bt.BluetoothStateReceiver
 import de.troido.bledemo.epd.conversion.BWConversion
 import kotlinx.android.synthetic.main.activity_epd_camera.*
+import java.lang.RuntimeException
 
 
 class EpdCameraActivity : AppCompatActivity(), CameraResultListener, BluetoothImplListener, BluetoothStateListener {

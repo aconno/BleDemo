@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BLE Demo</string>
+    <string name="app_name">ACD EPD Interface</string>
     <string name="permission_fail">Cannot proceed without the requested permissions.</string>
     <string name="btn_epd">EPD</string>
     <string name="btn_sensor">Sensor</string>
@@ -24,4 +24,7 @@
 
     <string name="accelerometer_chart_title">Accelerometer</string>
     <string name="accelerometer_chart_description">Accelerometer measured in g.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

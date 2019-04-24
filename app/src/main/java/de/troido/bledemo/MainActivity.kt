@@ -5,12 +5,16 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
+import com.crashlytics.android.Crashlytics
 import de.troido.bledemo.epd.EpdCameraActivity
 import de.troido.bledemo.sensor.SensorActivity
 import de.troido.bledemo.util.checkPermission
 import de.troido.bledemo.util.longToast
 import de.troido.bledemo.util.startActivity
+import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_main.*
+import java.lang.Exception
+import java.lang.RuntimeException
 
 private val PERMISSIONS = arrayOf(
         Manifest.permission.ACCESS_FINE_LOCATION,
@@ -28,6 +32,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Fabric.with(this, Crashlytics())
 
         val required = PERMISSIONS.filter { !checkPermission(it) }
         if (required.isEmpty()) {

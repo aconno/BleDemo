@@ -5,15 +5,15 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.support.design.widget.TabLayout
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
+import android.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.google.android.material.tabs.TabLayout
 import de.troido.bledemo.sensor.Sensor
 import de.troido.bledemo.sensor.SensorBleService
 import de.troido.bledemo.sensor.Vec3
@@ -24,6 +24,7 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import kotlinx.android.synthetic.main.activity_graph.*
 
 class IntentBroadcastReceiver : BroadcastReceiver() {
     val intentReceiver: PublishSubject<Intent> = PublishSubject.create()
@@ -192,10 +193,6 @@ class GraphActivity : AppCompatActivity() {
 
     private val initialTime = System.currentTimeMillis()
 
-    private lateinit var toolbar: Toolbar
-    private lateinit var chart: LineChart
-    private lateinit var graphTabs: TabLayout
-
     private lateinit var temperatureGraph: BleGraph<Float>
     private lateinit var lightGraph: BleGraph<Float>
     private lateinit var compassGraph: BleGraph<Triple<Float, Float, Float>>
@@ -206,11 +203,7 @@ class GraphActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_graph)
 
-        toolbar = findViewById(R.id.graphs_toolbar)
-        chart = findViewById(R.id.chart)
-        graphTabs = findViewById(R.id.graph_tabs)
-
-        graphTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        graph_tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {}
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -294,7 +287,7 @@ class GraphActivity : AppCompatActivity() {
     }
 
     private fun <T> displayGraph(graph: BleGraph<T>, title: String) {
-        toolbar.title = title
+        graphs_toolbar.title = title
 
         chart.description = graph.description
         chart.data = graph.lineData

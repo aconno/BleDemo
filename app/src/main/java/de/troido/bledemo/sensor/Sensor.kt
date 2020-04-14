@@ -1,6 +1,6 @@
 package de.troido.bledemo.sensor
 
-import android.support.annotation.DrawableRes
+import androidx.annotation.DrawableRes
 import android.util.Log
 import de.troido.bleacon.data.*
 import de.troido.bledemo.R

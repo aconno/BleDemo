@@ -2,8 +2,8 @@ package de.troido.bledemo.epd.conversion
 
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.support.annotation.ColorInt
-import android.support.annotation.IntRange
+import androidx.annotation.ColorInt
+import androidx.annotation.IntRange
 import de.troido.bledemo.epd.bits.BitArray
 
 class BWConversion {

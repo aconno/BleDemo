@@ -1,15 +1,11 @@
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/epd_fragment_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".epd.EpdCameraFragment"
-    android:id="@+id/epd_fragment_layout"
-    >
+    tools:context=".epd.EpdCameraFragment">
 
     <FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,33 +19,33 @@
             android:id="@+id/qr_preview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/black1"/>
+            android:background="@color/black1" />
 
         <TextView
             android:id="@+id/cam_permission_txt"
-            android:visibility="gone"
             style="@style/CameraInfoText"
-            android:layout_marginBottom="0dp"
             android:layout_gravity="center"
+            android:layout_marginBottom="0dp"
+            android:text="@string/camera_permission_info"
             android:textAlignment="center"
-            android:text="@string/camera_permission_info"/>
+            android:visibility="gone" />
 
         <Button
-            android:visibility="gone"
             android:id="@+id/cam_permission_btn"
             style="@style/CustomButton"
-            android:text="@string/got_it"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/margin_60"/>
+            android:layout_marginTop="@dimen/margin_60"
+            android:text="@string/got_it"
+            android:visibility="gone" />
 
         <!-- This FrameLayout insets its children based on system windows using
              android:fitsSystemWindows. -->
         <FrameLayout
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="@dimen/margin_default"
             android:fitsSystemWindows="true"
-            android:layout_margin="@dimen/margin_default">
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/fullscreen_content_controls"
@@ -59,8 +55,7 @@
                 android:layout_gravity="bottom|center_horizontal"
                 android:background="@color/black_overlay"
                 android:orientation="horizontal"
-                tools:ignore="UselessParent"
-                >
+                tools:ignore="UselessParent">
 
                 <Button
                     android:id="@+id/dummy_button"
@@ -68,7 +63,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/dummy_button"/>
+                    android:text="@string/dummy_button" />
 
             </LinearLayout>
         </FrameLayout>

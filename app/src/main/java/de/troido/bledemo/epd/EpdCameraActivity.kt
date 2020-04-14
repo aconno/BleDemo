@@ -7,11 +7,11 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
-import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
 import de.troido.bledemo.R
 import de.troido.bledemo.epd.bits.BitArray
 import de.troido.bledemo.epd.bt.BluetoothImpl
@@ -30,7 +30,7 @@ class EpdCameraActivity : AppCompatActivity(), CameraResultListener, BluetoothIm
     private var cameraActivityListener: CameraActivityListener? = null
 
     override fun onMessageWriteFailed() {
-        Toast.makeText(this, "Not Connected", Snackbar.LENGTH_LONG).show()
+        Toast.makeText(this, "Not Connected", Toast.LENGTH_LONG).show()
         cameraActivityListener?.onBLEnMessageTransferFailed()
     }
 

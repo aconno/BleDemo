@@ -2,8 +2,8 @@ package de.troido.bledemo.sensor
 
 import android.content.*
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import de.troido.bledemo.R
 import de.troido.bledemo.sensor.Sensor
 import de.troido.bledemo.sharedPreferences

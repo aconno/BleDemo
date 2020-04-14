@@ -1,8 +1,8 @@
 package de.troido.bledemo.util
 
 import android.app.Activity
-import android.support.annotation.StringRes
 import android.widget.Toast
+import androidx.annotation.StringRes
 
 inline fun Activity.toast(duration: Int, text: String) =
         Toast.makeText(this, text, duration).show()
